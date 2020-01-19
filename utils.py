@@ -3,6 +3,9 @@ from math import sqrt
 class InverseError(Exception):
     pass
 
+class IncorrectLength(Exception):
+    pass
+
 def read_matrix(filename):
     # Get all the numbers in the file
     l = []

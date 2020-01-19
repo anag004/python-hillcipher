@@ -1,7 +1,6 @@
-python scripts implementing a Hill cryptosystem. 
+# Python Hill Cipher
+> Python scripts for encryption, decryption and cryptanalysis of the Hill Cipher
 
-* How to use *
-0. Compile all files by running `make`
 1. Inputs are given via files. `key.in` contains an invertible (modulo 26) square matrix of integers. 
 2. `plaintext.in` contains the string to be encrypted
 3. Running `python encrypt.py` creates the file `ciphertext.out` which is the encrypted plaintext

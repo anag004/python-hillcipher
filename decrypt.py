@@ -3,6 +3,7 @@ from utils import *
 key_filename = "key.in"
 plaintext_filename = "plaintext.out"
 ciphertext_filename = "ciphertext.in"
+padding_letter = 'z'
 
 # Read the key as a matrix
 key = read_matrix("key.in")
@@ -26,7 +27,7 @@ plaintext = []
 curr_idx = 0
 while curr_idx < len(ciphertext):
     # Create the string to be processed with x's
-    curr_text = [24 for i in range(key_length)]
+    curr_text = [char2num(padding_letter) for i in range(key_length)]
     # Keep track of the positions at which character should be inserted into the ciphertext
     insert_positions = []
     # Count the number of characters read from the plaintext
@@ -37,7 +38,7 @@ while curr_idx < len(ciphertext):
             # This is a character
             curr_text[read_ctr] = char2num(ciphertext[curr_idx])
             # Put a dummy character into the ciphertext
-            plaintext.append('x')
+            plaintext.append('z')
             insert_positions.append(curr_idx)
             # Increment both counters
             read_ctr += 1
