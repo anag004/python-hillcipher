@@ -2,6 +2,7 @@
 from utils import *
 import sys
 import itertools
+from copy import deepcopy
 
 def get_key_length():
     if (len(sys.argv) != 2):
@@ -16,8 +17,8 @@ key_length = get_key_length()
 freqs = []
 idx = {}
 num_diagraphs = 0
-trial_length = 10
-common_diagraphs = ["th", "he", "in", "er", "an", "re", "nd", "at", "on", "nt"]
+common_diagraphs = ["th", "he", "in", "er", "an", "re", "nd", "at", "on", "nt", "ha", "es", "st", "en", "ed", "to", "it", "ou"]
+trial_length = len(common_diagraphs)
 tol = 0.003
 ideal_ic = 0.0686
 
@@ -45,22 +46,20 @@ def get_key(d1, d2, e1, e2):
     try:
         mat1_inv = matrix_inverse(mat1, 26)
     except InverseError:
-        return (False, False)
+        return (False, False, "diagraph non-invertible")
     key = matrix_mult2(mat2, mat1_inv, 26)
     key_inv = []
     try:
-        key_inv = matrix_inverse(key, 26)
+        key_inv = matrix_inverse(deepcopy(key), 26)
     except InverseError:
-        return (False, False)
-    return (key, key_inv)
-
-(key, key_inv) = get_key("sp", "ea", "zs", "kk")
+        return (False, False, "key non-invertible")
+    return (key, key_inv, "invertible")
 
 # Try various combinations of diagraphs
 for c1 in itertools.combinations(range(trial_length), 2):
-    for c2 in itertools.combinations(range(trial_length), 2):
-        print("Trying " + common_diagraphs[c1[0]] + "->" + freqs[c2[0]][1] + " and " + common_diagraphs[c1[1]] + "->" + freqs[c2[1]][1])
-        (key, key_inv) = get_key(common_diagraphs[c1[0]], common_diagraphs[c1[1]], freqs[c2[0]][1], freqs[c2[1]][1])
+    for c2 in itertools.combinations(range(min(trial_length, len(freqs))), 2):
+        (key, key_inv, verdict) = get_key(common_diagraphs[c1[0]], common_diagraphs[c1[1]], freqs[c2[0]][1], freqs[c2[1]][1])
+        print("Trying " + common_diagraphs[c1[0]] + "->" + freqs[c2[0]][1] + " and " + common_diagraphs[c1[1]] + "->" + freqs[c2[1]][1] + "..." + verdict)
         if (key):
             plaintext = apply(matrix_inverse(key, 26), ciphertext, 'z')
             plaintext_ic = friedman(plaintext)
