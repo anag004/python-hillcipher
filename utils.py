@@ -47,6 +47,21 @@ def matrix_mult(mat, vec, m):
         res[i] = row_sum
     return res
 
+def matrix_mult2(mat1, mat2, m):
+    assert(len(mat1[0]) == len(mat2))
+    rows = len(mat1)
+    cols = len(mat2[0])
+    mid = len(mat1[0])
+    result = [[0 for i in range(cols)] for j in range(rows)]
+    for i in range(rows):
+        for j in range(cols):
+            tmp = 0
+            for k in range(mid):
+                tmp += mat1[i][k] * mat2[k][j]
+                tmp %= m
+            result[i][j] = tmp
+    return result
+
 def gcd(a, b):
     if (a == 0 and b == 0):
         raise Exception("Cannot find gcd of zero and zero")
@@ -175,4 +190,28 @@ def apply(mat, text, padding_letter):
     # Convert the out_text to a string
     out_text = ''.join(out_text)
     return out_text
+
+# Find the index of coincidence of this 
+def friedman(text): 
+    n = 0
+    freq = [0 for i in range(26)]
+    for c in text:
+        if (c.isalpha()):
+            freq[char2num(c)] += 1
+            n += 1
+    ic = 0
+    for f in freq:
+        ic += f * (f - 1)
+    ic = float(ic) / float((n * (n - 1)))
+    return ic
+    
+# Construct a 2x2 matrix of diagraphs
+def construct_matrix(d):
+    assert(len(d) == 2)
+    ans = [[0 for i in range(2)] for j in range(2)]
+    for i in range(len(d)):
+        assert(len(d[i]) == 2)
+        ans[0][i] = char2num(d[i][0])
+        ans[1][i] = char2num(d[i][1])
+    return ans
 

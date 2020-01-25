@@ -10,6 +10,8 @@ key_length = len(key)
 plaintext = raw_input()
 
 ciphertext = apply(key, plaintext, padding_letter)
+print(friedman(plaintext))
+print(friedman(ciphertext))
 print(ciphertext)
 
     
