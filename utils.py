@@ -206,19 +206,19 @@ def friedman(text):
     ic = float(ic) / float((n * (n - 1)))
     return ic
     
-# Construct a 2x2 matrix of diagraphs
+# Construct a nxn matrix of ngraphs
 def construct_matrix(d):
-    assert(len(d) == 2)
-    ans = [[0 for i in range(2)] for j in range(2)]
-    for i in range(len(d)):
-        assert(len(d[i]) == 2)
-        ans[0][i] = char2num(d[i][0])
-        ans[1][i] = char2num(d[i][1])
+    n = len(d)
+    ans = [[0 for i in range(n)] for j in range(n)]
+    for i in range(n):
+        for j in range(n):
+            ans[j][i] = char2num(d[i][j])
     return ans
 
-def get_key(d1, d2, e1, e2):
-    mat1 = construct_matrix([d1, d2])
-    mat2 = construct_matrix([e1, e2])
+def get_key(d, e):
+    n = len(d)
+    mat1 = construct_matrix(d)
+    mat2 = construct_matrix(e)
     mat1_inv = []
     try:
         mat1_inv = matrix_inverse(mat1, 26)
