@@ -129,5 +129,50 @@ def matrix_inverse(mat, m):
 
     return res
 
-    
+# Applies the matrix mat to text and returns the new text
+def apply(mat, text, padding_letter):
+    mat_length = len(mat)
+        # Create an empty out_text character array
+    out_text = []
+
+    # Iterate over the text
+    curr_idx = 0
+    while curr_idx < len(text):
+        # Create the string to be processed with x's
+        curr_text = [char2num(padding_letter) for i in range(mat_length)]
+        # Keep track of the positions at which character should be inserted into the out_text
+        insert_positions = []
+        # Count the number of characters read from the text
+        read_ctr = 0
+        # Build up curr_text
+        while(read_ctr < mat_length and curr_idx < len(text)):
+            if (text[curr_idx].isalpha()):
+                # This is a character
+                curr_text[read_ctr] = char2num(text[curr_idx])
+                # Put a dummy character into the out_text
+                out_text.append(padding_letter)
+                insert_positions.append(curr_idx)
+                # Increment both counters
+                read_ctr += 1
+                curr_idx += 1
+            else:
+                # Copy the text character into the out_text
+                out_text.append(text[curr_idx])
+                curr_idx += 1
+
+        # Do matrix multiplication mod 26 and get encrypted text
+        mat_text = matrix_mult(mat, curr_text, 26)
+
+        # Place the text into the out_text
+        for i in range(read_ctr):
+            out_text[insert_positions[i]] = num2char(mat_text[i])
+        
+        # Append the residual out_text
+        for i in range(read_ctr, mat_length):
+            out_text.append(num2char(mat_text[i]))
+
+
+    # Convert the out_text to a string
+    out_text = ''.join(out_text)
+    return out_text
 
