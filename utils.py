@@ -1,4 +1,5 @@
 from math import sqrt
+from copy import deepcopy
 
 class InverseError(Exception):
     pass
@@ -215,3 +216,18 @@ def construct_matrix(d):
         ans[1][i] = char2num(d[i][1])
     return ans
 
+def get_key(d1, d2, e1, e2):
+    mat1 = construct_matrix([d1, d2])
+    mat2 = construct_matrix([e1, e2])
+    mat1_inv = []
+    try:
+        mat1_inv = matrix_inverse(mat1, 26)
+    except InverseError:
+        return (False, False, "diagraph non-invertible")
+    key = matrix_mult2(mat2, mat1_inv, 26)
+    key_inv = []
+    try:
+        key_inv = matrix_inverse(deepcopy(key), 26)
+    except InverseError:
+        return (False, False, "key non-invertible")
+    return (key, key_inv, "invertible")

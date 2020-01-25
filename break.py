@@ -11,8 +11,8 @@ class IncorrectFormat(Exception):
     pass
 
 def get_key_length():
-    if (len(sys.argv) != 2):
-        raise IncorrectFormat("Correct format - python break.py <key length>")
+    if (len(sys.argv) != 2 or int(sys.argv[1]) > 3):
+        raise IncorrectFormat("Correct format - python break.py <2 | 3>")
         exit()
     else:
         return int(sys.argv[1])
@@ -25,7 +25,7 @@ idx = {}
 num_diagraphs = 0
 common_diagraphs = ["th", "he", "in", "er", "an", "re", "nd", "at", "on", "nt", "ha", "es", "st", "en", "ed", "to", "it", "ou"]
 trial_length = len(common_diagraphs)
-tol = 0.003
+tol = 0.004
 ideal_ic = 0.0686
 
 ciphertext = raw_input()
@@ -51,28 +51,14 @@ while(read_ctr < len(ciphertext)):
 
 freqs.sort(reverse=True)
 
-def get_key(d1, d2, e1, e2):
-    mat1 = construct_matrix([d1, d2])
-    mat2 = construct_matrix([e1, e2])
-    mat1_inv = []
-    try:
-        mat1_inv = matrix_inverse(mat1, 26)
-    except InverseError:
-        return (False, False, "diagraph non-invertible")
-    key = matrix_mult2(mat2, mat1_inv, 26)
-    key_inv = []
-    try:
-        key_inv = matrix_inverse(deepcopy(key), 26)
-    except InverseError:
-        return (False, False, "key non-invertible")
-    return (key, key_inv, "invertible")
-
 num_possibles = 0
 found_keys = []
 # Try various combinations of diagraphs
 for c1 in itertools.combinations(range(trial_length), 2):
     for c2 in itertools.combinations(range(min(trial_length, len(freqs))), 2):
         (key, key_inv, verdict) = get_key(common_diagraphs[c1[0]], common_diagraphs[c1[1]], freqs[c2[0]][1], freqs[c2[1]][1])
+        # Uncomment when trying to debug
+        # print("Trying: " + str(num_possibles) + ": " + common_diagraphs[c1[0]] + "->" + freqs[c2[0]][1] + ", " + common_diagraphs[c1[1]] + "->" + freqs[c2[1]][1] + ": " + verdict)
         if (key != False):
             plaintext = apply(key_inv, ciphertext, 'z')
             plaintext_ic = friedman(plaintext)
