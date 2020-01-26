@@ -1,11 +1,15 @@
 from math import sqrt
 from copy import deepcopy
+from sys import stdin
 
 class InverseError(Exception):
     pass
 
 class IncorrectLength(Exception):
     pass
+
+def get_input():
+    return stdin.read().replace('\n', '')
 
 def read_matrix(filename):
     # Get all the numbers in the file
@@ -231,3 +235,9 @@ def get_key(d, e):
     except InverseError:
         return (False, False, "key non-invertible")
     return (key, key_inv, "invertible")
+
+def nCr(n, r):
+    ans = 1
+    for i in range(r):
+        ans *= (n - i)
+    return ans

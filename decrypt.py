@@ -11,7 +11,7 @@ key_length = len(key)
 key_inverse = matrix_inverse(key, 26)
 
 # Read the ciphertext
-ciphertext = raw_input()
+ciphertext = get_input()
 
 # Create an empty plaintext character array
 plaintext = []

@@ -7,7 +7,7 @@ padding_letter = 'z'
 key = read_matrix("key.in")
 key_length = len(key)
 
-plaintext = raw_input()
+plaintext = get_input()
 
 ciphertext = apply(key, plaintext, padding_letter)
 print(ciphertext)
